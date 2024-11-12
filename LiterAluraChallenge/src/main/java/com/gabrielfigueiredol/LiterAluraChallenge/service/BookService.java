@@ -7,6 +7,9 @@ import com.gabrielfigueiredol.LiterAluraChallenge.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class BookService {
     @Autowired
@@ -27,5 +30,9 @@ public class BookService {
         }
 
         bookRepository.save(book);
+    }
+
+    public List<Book> findAll() {
+        return bookRepository.findAll();
     }
 }

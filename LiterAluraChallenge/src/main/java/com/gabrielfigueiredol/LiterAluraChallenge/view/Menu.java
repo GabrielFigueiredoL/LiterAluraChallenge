@@ -7,6 +7,8 @@ import com.gabrielfigueiredol.LiterAluraChallenge.service.BooksApi;
 import com.gabrielfigueiredol.LiterAluraChallenge.service.ConvertData;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Menu {
@@ -42,7 +44,7 @@ public class Menu {
                     getBook();
                     break;
                 case 2:
-                    System.out.println("Opção 2");
+                    getSavedBooks();
                     break;
                 case 3:
                     System.out.println("Opção 3");
@@ -85,5 +87,11 @@ public class Menu {
         System.out.println("Livro escolhido:");
         System.out.println(chosenBook);
         bookService.saveBook(chosenBook);
+    }
+
+    private void getSavedBooks() {
+        List<Book> savedBooks = new ArrayList<>();
+        savedBooks = bookService.findAll();
+        savedBooks.stream().forEach(System.out::println);
     }
 }
