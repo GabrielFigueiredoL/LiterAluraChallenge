@@ -3,6 +3,7 @@ package com.gabrielfigueiredol.LiterAluraChallenge.model;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -16,8 +17,8 @@ public class Person {
     @JsonAlias("death_year")
     private Integer deathYear;
     private String name;
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Book> books;
+    @OneToMany
+    private List<Book> books = new ArrayList<>();
 
     public Person() {}
 

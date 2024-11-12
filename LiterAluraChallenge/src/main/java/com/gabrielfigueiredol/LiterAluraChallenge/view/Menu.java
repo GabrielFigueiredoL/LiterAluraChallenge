@@ -2,8 +2,10 @@ package com.gabrielfigueiredol.LiterAluraChallenge.view;
 
 import com.gabrielfigueiredol.LiterAluraChallenge.model.ApiResponse;
 import com.gabrielfigueiredol.LiterAluraChallenge.model.Book;
+import com.gabrielfigueiredol.LiterAluraChallenge.service.BookService;
 import com.gabrielfigueiredol.LiterAluraChallenge.service.BooksApi;
 import com.gabrielfigueiredol.LiterAluraChallenge.service.ConvertData;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Scanner;
 
@@ -12,6 +14,11 @@ public class Menu {
     private BooksApi booksApi = new BooksApi();
     private final String WEBURL = "https://gutendex.com/books/?search=";
     private ConvertData convertData = new ConvertData();
+    private BookService bookService;
+
+    public Menu(BookService bookService) {
+        this.bookService = bookService;
+    }
 
     public void showMenu() {
         var option = -1;
@@ -19,7 +26,7 @@ public class Menu {
         while (option != 0) {
             var menu = """
                     Escolha uma opção:
-                    1 - Buscar livro pelo título
+                    1 - Buscar livro pelo título ou autor
                     2 - Listar livros registrados
                     3 - Listar autores registrados
                     4 - Listar autores vivos em um determinado ano
@@ -75,7 +82,8 @@ public class Menu {
         System.out.println("Digite o número do livro que deseja salvar: ");
         int option = sc.nextInt();
         Book chosenBook = new Book(bookData.results().get(option - 1));
+        System.out.println("Livro escolhido:");
         System.out.println(chosenBook);
-        System.out.println("Salvar livro option - 1");
+        bookService.saveBook(chosenBook);
     }
 }

@@ -1,9 +1,7 @@
 package com.gabrielfigueiredol.LiterAluraChallenge.model;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,7 +14,8 @@ public class Book {
     private List<String> languages;
     @JsonAlias("download_count")
     private Integer downloadCount;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "author_id")
     private Person author;
 
     public Book() {}
