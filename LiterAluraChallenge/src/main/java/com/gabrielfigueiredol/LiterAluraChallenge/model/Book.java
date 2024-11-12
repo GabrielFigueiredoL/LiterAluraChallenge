@@ -1,26 +1,40 @@
 package com.gabrielfigueiredol.LiterAluraChallenge.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonAlias;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Entity
 public class Book {
+    @Id
     private Integer id;
     private String title;
-    private List<Person> authors;
     private List<String> languages;
+    @JsonAlias("download_count")
     private Integer downloadCount;
+    @ManyToOne
+    private Person author;
 
     public Book() {}
 
-    public Book(Integer id, String title, List<Person> authors, List<String> languages, Integer downloadCount) {
+    public Book(Integer id, String title, Person author, List<String> languages, Integer downloadCount) {
         this.id = id;
         this.languages = languages;
-        this.authors = authors;
+        this.author = author;
         this.title = title;
         this.downloadCount = downloadCount;
+    }
+
+    public Book(BookResponse bookResponse) {
+        id = bookResponse.id();
+        author = bookResponse.authors().get(0);
+        title = bookResponse.title();
+        languages = bookResponse.languages();
+        downloadCount = bookResponse.downloadCount();
     }
 
     public Integer getId() {
@@ -40,12 +54,12 @@ public class Book {
     }
 
 
-    public List<Person> getAuthors() {
-        return authors;
+    public Person getAuthor() {
+        return author;
     }
 
-    public void setAuthors(List<Person> authors) {
-        this.authors = authors;
+    public void setAuthor(Person author) {
+        this.author = author;
     }
 
     public List<String> getLanguages() {
@@ -68,9 +82,7 @@ public class Book {
     public String toString() {
         return "---------- LIVRO ----------" +
                 "\nTitulo: " + getTitle() +
-                "\nAutores: " + getAuthors().stream()
-                .map(Person::getName)
-                .collect(Collectors.joining(", \n")) +
+                "\nAutores: " + getAuthor().getName() +
                 "\nIdiomas: " + getLanguages().stream()
                 .collect(Collectors.joining(", ")) +
                 "\nNúmero de downloads: " + getDownloadCount();

@@ -1,11 +1,23 @@
 package com.gabrielfigueiredol.LiterAluraChallenge.model;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+import jakarta.persistence.*;
+
+import java.util.List;
 import java.util.Objects;
 
+@Entity
 public class Person {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @JsonAlias("birth_year")
     private Integer birthYear;
+    @JsonAlias("death_year")
     private Integer deathYear;
     private String name;
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Book> books;
 
     public Person() {}
 
@@ -44,11 +56,16 @@ public class Person {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Person person = (Person) o;
-        return Objects.equals(birthYear, person.birthYear) && Objects.equals(deathYear, person.deathYear) && Objects.equals(name, person.name);
+        return Objects.equals(birthYear, person.birthYear) && Objects.equals(name, person.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(birthYear, deathYear, name);
+        return Objects.hash(birthYear, name);
+    }
+
+    @Override
+    public String toString() {
+        return getName();
     }
 }

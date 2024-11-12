@@ -1,16 +1,17 @@
 package com.gabrielfigueiredol.LiterAluraChallenge.view;
 
+import com.gabrielfigueiredol.LiterAluraChallenge.model.ApiResponse;
 import com.gabrielfigueiredol.LiterAluraChallenge.model.Book;
-import com.gabrielfigueiredol.LiterAluraChallenge.model.Person;
 import com.gabrielfigueiredol.LiterAluraChallenge.service.BooksApi;
+import com.gabrielfigueiredol.LiterAluraChallenge.service.ConvertData;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Menu {
     private Scanner sc = new Scanner(System.in);
     private BooksApi booksApi = new BooksApi();
-    private final String WEBURL = "https://gutendex.com//books?search=";
+    private final String WEBURL = "https://gutendex.com/books/?search=";
+    private ConvertData convertData = new ConvertData();
 
     public void showMenu() {
         var option = -1;
@@ -31,9 +32,7 @@ public class Menu {
 
             switch (option) {
                 case 1:
-                    System.out.println("Digite o titulo do livro: ");
-                    var bookName = sc.nextLine();
-                    var response = booksApi.getData(WEBURL + bookName.replace(" ", "%20"));
+                    getBook();
                     break;
                 case 2:
                     System.out.println("Opção 2");
@@ -56,4 +55,27 @@ public class Menu {
         }
     }
 
+    private ApiResponse getBookData() {
+        System.out.println("Digite o titulo do livro: ");
+        String bookName = sc.nextLine();
+        var response = booksApi.getData(WEBURL + bookName.replace(" ", "%20"));
+        return convertData.getData(response, ApiResponse.class);
+    }
+
+    private void getBook() {
+        ApiResponse bookData = getBookData();
+        if (bookData.count() == 0) {
+            System.out.println("Livro não encontrado.");
+            return;
+        }
+
+        for (int i = 0; i < bookData.results().size(); i++) {
+            System.out.println((i + 1) + "- " + bookData.results().get(i));
+        }
+        System.out.println("Digite o número do livro que deseja salvar: ");
+        int option = sc.nextInt();
+        Book chosenBook = new Book(bookData.results().get(option - 1));
+        System.out.println(chosenBook);
+        System.out.println("Salvar livro option - 1");
+    }
 }
