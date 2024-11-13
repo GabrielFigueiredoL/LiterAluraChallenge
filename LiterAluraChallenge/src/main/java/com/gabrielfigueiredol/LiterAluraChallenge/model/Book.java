@@ -11,10 +11,11 @@ public class Book {
     @Id
     private Integer id;
     private String title;
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<String> languages;
     @JsonAlias("download_count")
     private Integer downloadCount;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "author_id")
     private Person author;
 

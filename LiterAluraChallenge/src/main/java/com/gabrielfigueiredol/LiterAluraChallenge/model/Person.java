@@ -17,7 +17,7 @@ public class Person {
     @JsonAlias("death_year")
     private Integer deathYear;
     private String name;
-    @OneToMany
+    @OneToMany(mappedBy = "author", fetch = FetchType.EAGER)
     private List<Book> books = new ArrayList<>();
 
     public Person() {}
@@ -52,6 +52,10 @@ public class Person {
         this.deathYear = deathYear;
     }
 
+    public List<Book> getBooks() {
+        return books;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -67,6 +71,11 @@ public class Person {
 
     @Override
     public String toString() {
-        return getName();
+        return "-----------\n" +
+                "Nome do autor: " + getName() + "\n" +
+                "Ano de nascimento: " + getBirthYear() + "\n" +
+                "Ano de falecimento: " + getDeathYear() + "\n" +
+                "Livros: [" + String.join(", ",
+                getBooks().stream().map(Book::getTitle).toArray(String[]::new)) + "]";
     }
 }

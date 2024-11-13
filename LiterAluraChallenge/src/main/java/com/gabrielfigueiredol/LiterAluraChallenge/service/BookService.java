@@ -4,10 +4,10 @@ import com.gabrielfigueiredol.LiterAluraChallenge.model.Book;
 import com.gabrielfigueiredol.LiterAluraChallenge.model.Person;
 import com.gabrielfigueiredol.LiterAluraChallenge.repository.BookRepository;
 import com.gabrielfigueiredol.LiterAluraChallenge.repository.PersonRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,5 +34,9 @@ public class BookService {
 
     public List<Book> findAll() {
         return bookRepository.findAll();
+    }
+
+    public List<Book> findByLanguage(String chosenLanguage) {
+        return bookRepository.findBooksByLanguage(chosenLanguage);
     }
 }
